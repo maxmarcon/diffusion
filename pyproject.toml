@@ -8,16 +8,13 @@ dependencies = [
     "ipykernel>=7.2.0",
     "keras>=3.14.1",
     "tensorflow<=2.16.2; sys_platform == 'darwin' and platform_machine == 'x86_64'",
-    "tensorflow>=2.16.2 ; sys_platform == 'linux'",
-    # Force Mac to strictly use 2.2.2
+    "tensorflow>2.16.2 ; sys_platform == 'linux'",
     "torch==2.2.2; sys_platform == 'darwin' and platform_machine == 'x86_64'",
-    # Force Linux to look for a completely different tier (e.g., version 2.5 or higher)
-    "torch>=2.5.0; sys_platform == 'linux'",
+    "torch>2.2.2; sys_platform == 'linux'",
     "transformers<5.0.0; sys_platform == 'darwin' and platform_machine == 'x86_64'",
-    "transformers; sys_platform == 'linux'",
-    # Platform-specific Torchvision (Matches the Torch requirements)
+    "transformers>=5.0.0; sys_platform == 'linux'",
     "torchvision==0.17.2; sys_platform == 'darwin' and platform_machine == 'x86_64'",
-    "torchvision>=0.20.0; sys_platform == 'linux'",
+    "torchvision>0.17.2; sys_platform == 'linux'",
     "datasets>=4.8.5",
     "accelerate>=0.16.0",
     "diffusers",

@@ -8,6 +8,8 @@ WORKDIR /diffusion
 COPY .python-version ./
 COPY pyproject.toml ./
 COPY uv.lock ./
+RUN /root/.local/bin/uv sync 
+
 COPY train_unconditional.py ./
 
 ENTRYPOINT [ "bash" ]

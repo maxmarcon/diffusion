@@ -7,6 +7,5 @@ services:
     container_name: diffusion_app
     stdin_open: true
     tty: true
-    # Uncomment and adjust ports if your image exposes a service
-    # ports:
-    #   - "8000:8000"
+    volumes:
+      - ./data:/diffusion/data:ro

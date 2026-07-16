@@ -9,3 +9,4 @@ services:
     tty: true
     volumes:
       - ./data:/diffusion/data:ro
+      - ./.env:/diffusion/.env

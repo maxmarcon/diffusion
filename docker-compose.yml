@@ -8,5 +8,5 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./data:/diffusion/data:ro
+      - ./data:/diffusion/data
       - ./.env:/diffusion/.env

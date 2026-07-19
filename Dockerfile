@@ -11,6 +11,7 @@ COPY uv.lock ./
 RUN /root/.local/bin/uv sync 
 
 COPY train_unconditional.py ./
+COPY train.sh ./
 
 ENTRYPOINT [ "bash" ]
 

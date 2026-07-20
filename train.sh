@@ -3,21 +3,19 @@ set -euo pipefail
 
 DATASETDIR=./tmp_data_dir
 
-set -a
-source .env
-set +a
-
-if [[ -z ${HF_TOKEN:-} ]]; then
-    echo "No HF_TOKEN found!"
-    exit 1
-fi
-
 if [[ $# -lt 1 ]]; then
   echo "Usage: $0 <dataset.tar.gz> [train_unconditional.py options...]" >&2
   exit 1
 fi
 
+set -a
+source .env
+set +a
 
+if [[ -z ${HF_TOKEN:-} ]] && [[ "$@" =~ "--push_to_hub" ]]; then
+    echo "No HF_TOKEN found!"
+    exit 1
+fi
 
 
 archive_file="$1"

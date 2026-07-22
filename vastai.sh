@@ -1,17 +1,33 @@
 #!/usr/bin/env bash
-set -exuo pipefail
+set -euo pipefail
 
 
 TRAIN_DATASET=klimt.tar.gz
 TRAIN_ARGS="--push_to_hub --hub_model_id=klimt-diffusion"
 
-if [[ $# -lt 2 ]]; then
-  echo "Usage: $0 <port> <remote host>" >&2
+function usage() {
+  echo "Usage: $0 -p <port> <remote host>" >&2
   exit 1
-fi
+}
 
-PORT=$1
-HOST=$2
+PORT=
+
+while getopts "p:h" option; do 
+    case "${option}" in 
+        p)
+            PORT=$OPTARG
+            ;;
+        h)
+            usage
+            ;;
+    esac
+done
+
+HOST=${@:$OPTIND:1}
+
+if [[ -z "$PORT" ]] || [[ -z "$HOST" ]]; then 
+    usage
+fi
 
 FILES=(pyproject.toml uv.lock train_unconditional.py train.sh data/*.gz .env)
 

@@ -18,10 +18,11 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 
 url_map = {"klimt": "http://art-klimt.com/gallery.html"}
-semaphore = asyncio.Semaphore(5)
+semaphore = asyncio.Semaphore(2)
 
 successfully_downloaded = 0
 errors = []
+
 
 def save_image(target_dir: Path, image_url: str):
     path = Path(image_url)
@@ -36,7 +37,9 @@ def save_image(target_dir: Path, image_url: str):
             f.write(response.content)
 
 
-async def visit_subpage_and_download_artwork(browser: Browser, target_dir: Path, image_page_url: str):
+async def visit_subpage_and_download_artwork(
+    browser: Browser, target_dir: Path, image_page_url: str
+):
     # logging.info(f"visiting: {image_page_url}")
     global successfully_downloaded
     async with semaphore:
@@ -54,6 +57,13 @@ async def visit_subpage_and_download_artwork(browser: Browser, target_dir: Path,
             logger.info(f"Error while visiting {image_page_url}: {e}")
             errors.append((image_page_url, e))
 
+
+async def artwork_pages(page_url: str, locators: list[Locator]):
+    for artwork in locators:
+        href = await artwork.get_attribute("href")
+        yield urljoin(page_url, href)
+
+
 async def download_artist(playwright: Playwright, target_dir: Path, url: str):
     logger.info("starting browser...")
     chromium = playwright.chromium  # or "firefox" or "webkit".
@@ -64,17 +74,17 @@ async def download_artist(playwright: Playwright, target_dir: Path, url: str):
     await page.goto(url)
 
     logger.info("fetching image list")
-    image_links = await page.locator("td > a").all()
+    artworks = await page.locator("td > a").all()
 
-    logger.info(f"found {len(image_links)} links")
+    logger.info(f"found {len(artworks)} links")
 
-    tasks = []
-    for image in image_links:
-        href = await image.get_attribute("href")
-        image_page_url = urljoin(page.url, href)
-        tasks.append(asyncio.create_task(visit_subpage_and_download_artwork(browser, target_dir, image_page_url)))
+    tasks = [
+        visit_subpage_and_download_artwork(browser, target_dir, artwork_page)
+        async for artwork_page in artwork_pages(page.url, artworks)
+    ]
 
     await tqdm.gather(*tasks, desc="downloading images")
+
 
 async def main():
     artist = args.artist
@@ -94,5 +104,6 @@ async def main():
     logger.info(f"WITH ERRORS {len(errors)}")
     for url, error in errors:
         logger.info(f"{url}: {error}")
+
 
 asyncio.run(main())

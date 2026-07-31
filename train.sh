@@ -32,7 +32,7 @@ echo "Extracting dataset archive: $archive_file to ${DATASETDIR}"
 tar -xzf "$archive_file" -C "${DATASETDIR}"
 
 set -x
-uv run "./train_unconditional.py" \
+uv run --no-dev "./train_unconditional.py" \
   --train_data_dir "${DATASETDIR}" \
   "$@"
 

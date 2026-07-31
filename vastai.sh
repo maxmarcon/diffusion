@@ -3,7 +3,7 @@ set -euo pipefail
 
 
 TRAIN_DATASET=klimt.tar.gz
-TRAIN_ARGS="--push_to_hub --hub_model_id=klimt-diffusion --resolution=256 --num_epochs=1000"
+TRAIN_ARGS="--push_to_hub --hub_model_id=klimt-diffusion --resolution=256 --num_epochs=1000 --train_batch_size=8 --ddpm_num_inference_steps=100"
 TB_PORT=6007
 
 function usage() {

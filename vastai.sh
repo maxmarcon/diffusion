@@ -2,7 +2,16 @@
 set -euo pipefail
 
 
-TRAIN_ARGS="--push_to_hub --hub_model_id=maxmarcon/klimt-diffusion --dataset_name=maxmarcon/klimt --resolution=256 --num_epochs=1000 --train_batch_size=8 --ddpm_num_inference_steps=100 --resume_from_checkpoint=latest"
+TRAIN_ARGS="--push_to_hub \
+--hub_model_id=maxmarcon/klimt-diffusion \
+--dataset_name=maxmarcon/klimt \
+--resolution=256 \
+--num_epochs=1000 \
+--train_batch_size=8 \
+--ddpm_num_inference_steps=100 \
+--checkpoints_total_limit=2 \
+--resume_from_checkpoint=latest"
+
 
 function usage() {
   echo "Usage: $0 -p <port> <remote host> <other_options>" >&2

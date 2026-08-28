@@ -3,6 +3,8 @@ Denoising Diffusion Probabilistic Model trained to imitate Klimt's style of pain
 
 Trained for 500 epochs on the paintings [on this site](http://art-klimt.com/gallery.html).
 
+Huggingface Repo: https://huggingface.co/maxmarcon/klimt-diffusion
+
 Usage:
 
 ```python
@@ -24,3 +26,5 @@ plt.show()
 ```
 
 ![alt text](sample.png)
+
+

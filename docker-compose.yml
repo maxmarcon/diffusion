@@ -4,9 +4,12 @@ services:
       context: .
       dockerfile: Dockerfile
     image: diffusion_app:latest
+    env_file:
+      - .env
+    ports: 
+      - 8888:8888
     container_name: diffusion_app
     stdin_open: true
     tty: true
     volumes:
       - ./data:/diffusion/data
-      - ./.env:/diffusion/.env

@@ -5,14 +5,27 @@ RUN apt-get update && \
     curl -LsSf https://astral.sh/uv/install.sh | sh
 
 WORKDIR /diffusion
+
+
+# Make uv globally available
+RUN cp /root/.local/bin/uv /usr/local/bin/uv
+
+RUN adduser --system --no-create-home --ingroup root diffusion
+RUN chown diffusion /diffusion
+USER diffusion 
+
 COPY .python-version ./
 COPY pyproject.toml ./
 COPY uv.lock ./
-RUN /root/.local/bin/uv sync 
+
+
+ENV HOME=/diffusion
+RUN uv sync
 
 COPY train_unconditional.py ./
 COPY maybe_fetch_checkpoint.py ./
 COPY train.sh ./
+COPY inference.ipynb ./
 
-ENTRYPOINT [ "bash" ]
+ENTRYPOINT [ "uv", "run", "jupyter-lab", "--no-browser", "--ip='*'", "--ServerApp.token=''", "--ServerApp.password=''" ]
 
